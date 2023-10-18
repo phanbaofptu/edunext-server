@@ -1,17 +1,18 @@
 // config/database.js
-var mongoose = require('mongoose');
-var dbURL = require('./properties').DB;
+var mongoose = require("mongoose");
+var dbURL = require("./properties").DB;
 
 module.exports = async function () {
   try {
+    mongoose.set("strictQuery", true);
     await mongoose.connect(dbURL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      dbName: 'edunext'
+      dbName: "edunext",
     });
 
-    console.log('Connect thành công');
+    console.log("Connect thành công");
   } catch (error) {
-    console.log('Connect lỗi');
+    console.log("Connect lỗi");
   }
 };
