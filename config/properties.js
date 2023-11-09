@@ -6,5 +6,6 @@ module.exports = {
     "http://localhost:3000",
     "http://192.168.1.2:3000",
     "https://edunext-client.vercel.app",
+    "https://phanbao.id.vn",
   ],
 };

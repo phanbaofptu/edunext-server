@@ -3,11 +3,9 @@ const Schema = mongoose.Schema;
 const mongooseDelete = require("mongoose-delete");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-
 const User = new Schema(
   {
+    _userId: { type: Number },
     username: {
       type: String,
       required: [true, "Username không được bỏ trống"],
@@ -40,7 +38,7 @@ const User = new Schema(
 );
 
 //Add plugin
-User.plugin(AutoIncrement);
+User.plugin(AutoIncrement, { id: "_userId" });
 User.plugin(mongooseDelete, {
   overrideMethods: "all",
   deletedAt: true,

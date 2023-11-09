@@ -2,13 +2,6 @@ const Classes = require("../../models/Class");
 const Semester = require("../../models/Semester");
 
 module.exports.index = async (req, res, next) => {
-  // try {
-  //   console.log("!!!!!");
-  //   const response = await Classes.find({});
-  //   console.log(response);
-  // } catch (error) {
-  //   console.log(error);
-  // }
   await Classes.find({})
     .populate("semesterId")
     .then((classes) => {
@@ -42,11 +35,11 @@ module.exports.update = (req, res, next) => {
   const clasEdu = new Classes(req.body);
   Classes.updateOne({ _id: clasEdu._id }, clasEdu)
     .then((data) => res.json("Đã thay đổi thành công"))
-    .catch(next);
+    .catch((next) => res.status(500).json(next));
 };
 
 module.exports.delete = (req, res, next) => {
   Classes.delete({ _id: req.params.id })
     .then((data) => res.json("Đã xoá thành công"))
-    .catch(next);
+    .catch((next) => res.status(500).json(next));
 };
