@@ -47,6 +47,17 @@ module.exports.login = (req, res, next) => {
         role: data.role,
       });
       res.cookie("jwt", token, { httpOnly: true });
+      res.cookie(
+        "uid",
+        {
+          _id: data._id,
+          username: data.username,
+          email: data.email,
+          name: data.name,
+          role: data.role,
+        },
+        { httpOnly: true }
+      );
       res.status(200).json(token);
     })
     .catch((next) => res.status(500));
