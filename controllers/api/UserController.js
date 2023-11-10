@@ -56,7 +56,12 @@ module.exports.login = (req, res, next) => {
           name: data.name,
           role: data.role,
         },
-        { httpOnly: true }
+        {
+          domain: "https://edunext-client.vercel.app/",
+          httpOnly: true,
+          sameSite: "strict",
+          path: "/",
+        }
       );
       res.status(200).json(token);
     })
