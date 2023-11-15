@@ -29,13 +29,13 @@ module.exports.delete = (req, res, next) => {
     .catch((next) => res.status(500).json(next));
 };
 
-const maxAge = 60 * 60;
+const maxAge = 60 * 60 * 30;
 const createToken = (data) => {
-  return jwt.sign({ data }, "edunext secret key", { expiresIn: maxAge });
+  return jwt.sign({ data }, "edunext_secret_key", { expiresIn: maxAge });
 };
 module.exports.login = (req, res, next) => {
   User.findOne({
-    username: req.body.username,
+    email: req.body.email,
     password: req.body.password,
   })
     .then((data) => {
@@ -46,29 +46,35 @@ module.exports.login = (req, res, next) => {
         name: data.name,
         role: data.role,
       });
-      res.cookie("jwt", token, { httpOnly: true });
-      res.cookie(
-        "uid",
-        {
-          _id: data._id,
-          username: data.username,
-          email: data.email,
-          name: data.name,
-          role: data.role,
-        },
-        {
-          domain: "https://edunext-client.vercel.app/",
-          httpOnly: true,
-          sameSite: "strict",
-          path: "/",
-        }
-      );
+      res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge });
       res.status(200).json(token);
     })
-    .catch((next) => res.status(500));
+    .catch((next) => res.status(500).json(next));
 };
 
 module.exports.logout = (req, res, next) => {
-  res.clearCookie("jwt");
-  console.log("Cookie cleared");
+  res.cookie("jwt", "Invalid Authorization", { httpOnly: false, maxAge: 0 });
+};
+
+module.exports.auth = async (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) {
+    return res.status(401).json({ message: "Invalid Authorization" });
+  }
+
+  try {
+    const userId = jwt.decode(authorization);
+
+    const user = await User.findById(userId.data._id);
+
+    if (!userId) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    return res.json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };

@@ -2,16 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const AssignmentController = require("../controllers/api/AssignmentController.js");
-const {
-  checkAdmin,
-  checkAuth,
-  checkUser,
-  checkTeacher,
-} = require("../middlewares/AuthMiddlewares.js");
 
-router.post("/add", checkTeacher, AssignmentController.add);
-router.put("/update/:id", checkTeacher, AssignmentController.update);
-router.delete("/delete/:id", checkTeacher, AssignmentController.delete);
-router.get("/:id", checkUser, AssignmentController.findById);
-router.get("/", checkUser, AssignmentController.index);
+router.post("/add", AssignmentController.add);
+router.put("/update/:id", AssignmentController.update);
+router.delete("/delete/:id", AssignmentController.delete);
+router.get("/:id", AssignmentController.findById);
+router.get("/", AssignmentController.index);
 module.exports = router;
