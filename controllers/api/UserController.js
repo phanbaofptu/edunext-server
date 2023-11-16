@@ -29,7 +29,7 @@ module.exports.delete = (req, res, next) => {
     .catch((next) => res.status(500).json(next));
 };
 
-const maxAge = 60 * 60 * 30;
+const maxAge = 60 * 60;
 const createToken = (data) => {
   return jwt.sign({ data }, "edunext_secret_key", { expiresIn: maxAge });
 };
@@ -46,7 +46,10 @@ module.exports.login = (req, res, next) => {
         name: data.name,
         role: data.role,
       });
-      res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge });
+      res.cookie("jwt", token, {
+        httpOnly: false,
+        maxAge: 2 * 60 * 60 * 1000,
+      });
       res.status(200).json(token);
     })
     .catch((next) => res.status(500).json(next));

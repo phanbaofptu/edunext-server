@@ -11,12 +11,12 @@ module.exports.index = async (req, res, next) => {
         slot = await slot.populate("questionId");
       }
       if (slot.assignmentId) {
-        // slot = await slot.populate("assignmentId");
+        slot = await slot.populate("assignmentId");
       }
       return slot;
     })
   );
-
+  console.log(populatedSlots);
   res.json(populatedSlots);
 };
 
@@ -57,7 +57,7 @@ module.exports.findById = async (req, res, next) => {
       return course;
     })
     .then((course) => {
-      // course.assignmentId && course.populate("assignmentId");
+      course.assignmentId && course.populate("assignmentId");
       res.status(200).json(course);
       console.log(course);
     })

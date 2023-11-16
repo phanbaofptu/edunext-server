@@ -1,5 +1,5 @@
 const Assignment = require("../../models/Assignment");
-const Course = require("../../models/Course");
+const Slot = require("../../models/Slot");
 const User = require("../../models/User");
 
 module.exports.index = async (req, res, next) => {
@@ -23,6 +23,11 @@ module.exports.add = async (req, res, next) => {
       res.status(500).json("Internal Server Error");
       console.log(next);
     });
+  await Slot.findByIdAndUpdate(assignment.slotId, {
+    $push: { assignmentId: assignment._id },
+  })
+    .then((data) => res.json("Đã cập nhật thành công"))
+    .catch((next) => res.status(500).json(next));
 };
 
 module.exports.update = (req, res, next) => {

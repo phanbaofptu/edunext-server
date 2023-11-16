@@ -10,6 +10,7 @@ const Slot = new Schema(
   {
     _slotId: { type: Number },
     courseId: { type: Number, ref: "Course" },
+    code: { type: String, required: true },
     name: { type: String, required: true },
     questionId: [{ type: Number, ref: "Question" }],
     assignmentId: [{ type: Number, ref: "Assignment" }],
